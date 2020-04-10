@@ -1,0 +1,379 @@
+{
+	"info": {
+		"_postman_id": "6302dd6e-3e11-437b-a9ea-ef49b31f6b1c",
+		"name": "simple-scrum-virus",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "create course startDate > deadline  - localhost:8080/course",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b47cc63e-9e1b-4212-8bcf-650884391277",
+						"exec": [
+							"pm.test('status code is 400', () => pm.response.to.have.status(400));",
+							"pm.test('response must be invalid and have body', () => {",
+							"    pm.response.to.be.badRequest;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"}) ",
+							"const jsonData = pm.response.json();",
+							"pm.test('message is invalid dates', () => {",
+							"    pm.expect(jsonData.message).to.equal('Invalid dates')",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"\",\n    \"startDate\": \"2016-04-23T18:25:43.511Z\",\n    \"deadline\": \"2014-04-23T18:25:43.511Z\",\n    \"scrumEvangelist\": {\n    \t\"id\": \"1\",\n        \"username\": \"Kowalski\"\n    },\n    \"courseEnrollments\": []\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/course/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create course - localhost:8080/course",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b47cc63e-9e1b-4212-8bcf-650884391277",
+						"exec": [
+							"pm.test('status code is 200', () => pm.response.to.have.status(200));",
+							"pm.test('response must be valid and have body', () => {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"}) ",
+							"const jsonData = pm.response.json();",
+							"pm.test('id is assigned', () => {",
+							"    pm.expect(jsonData.id).to.be.a('number')",
+							"})",
+							"pm.environment.set(\"courseId\", jsonData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"\",\n    \"startDate\": \"2012-04-23T18:25:43.511Z\",\n    \"deadline\": \"2014-04-23T18:25:43.511Z\",\n    \"scrumEvangelist\": {\n        \"id\": \"1\",\n        \"username\": \"Kowalski\",\n        \"specialization\": \"scrum\"\n    },\n    \"courseEnrollments\": []\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/course/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enroll user 2 to course - localhost:8080/course/{{courseId}}/enroll/2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d2507abb-28d0-4235-a60f-cdae72e68862",
+						"exec": [
+							"pm.test('status code is 200', () => pm.response.to.have.status(200));",
+							"pm.test('response must be valid and have body', () => {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"}) ",
+							"const jsonData = pm.response.json();",
+							"pm.test('user is not null and correct', () => {",
+							"    pm.expect(jsonData.user).to.be.an('object')",
+							"    pm.expect(jsonData.user.id).to.equal(2)",
+							"    pm.expect(jsonData.user.username).to.equal('Nowak')",
+							"})",
+							"",
+							"pm.test('finishDate is null', () => {",
+							"    pm.expect(jsonData.finishDate).to.be.a('undefined')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/course/{{courseId}}/enroll/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						"{{courseId}}",
+						"enroll",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "enroll user 2 second time to course - localhost:8080/course/{{courseId}}/enroll/2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "d2507abb-28d0-4235-a60f-cdae72e68862",
+						"exec": [
+							"pm.test('status code is 500', () => pm.response.to.have.status(500));",
+							"pm.test('response must be invalid and have body', () => {",
+							"    pm.response.to.have.status(\"Internal Server Error\");",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"}) ",
+							"const jsonData = pm.response.json();",
+							"pm.test('error message check', () => {",
+							"    const courseId = pm.environment.get('courseId');",
+							"    pm.expect(jsonData.message).to.equal('User id=2 is already enrolled to course id=' + courseId)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/course/{{courseId}}/enroll/2",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						"{{courseId}}",
+						"enroll",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get overdue user should return user - localhost:8080/course/1/overdue",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5d2848f7-9c8e-4f5b-b1e6-a7a78ed77ed8",
+						"exec": [
+							"pm.test('status code is 200', () => pm.response.to.have.status(200));",
+							"pm.test('response must be valid and have body', () => {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"}) ",
+							"const jsonData = pm.response.json();",
+							"pm.test('response body is correct user', () => {",
+							"    pm.expect(jsonData[0].id).to.equal(2)",
+							"    pm.expect(jsonData[0].username).to.equal('Nowak')",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/course/{{courseId}}/overdue",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						"{{courseId}}",
+						"overdue"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "postpone deadline  - localhost:8080/course/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "b47cc63e-9e1b-4212-8bcf-650884391277",
+						"exec": [
+							"pm.test('status code is 200', () => pm.response.to.have.status(200));",
+							"pm.test('response must be valid and have body', () => {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"}) ",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"{{courseId}}\",\n    \"startDate\": \"2012-04-23T18:25:43.511Z\",\n    \"deadline\": \"2022-04-23T18:25:43.511Z\",\n    \"scrumEvangelist\": {\n        \"id\": \"1\",\n        \"username\": \"Kowalski\",\n        \"specialization\": \"scrum\"\n    },\n    \"courseEnrollments\": []\n}"
+				},
+				"url": {
+					"raw": "localhost:8080/course/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get overdue user should return empty - localhost:8080/course/1/overdue Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5d2848f7-9c8e-4f5b-b1e6-a7a78ed77ed8",
+						"exec": [
+							"pm.test('status code is 200', () => pm.response.to.have.status(200));",
+							"pm.test('response must be valid and have body', () => {",
+							"    pm.response.to.be.ok;",
+							"    pm.response.to.be.withBody;",
+							"    pm.response.to.be.json;",
+							"}) ",
+							"const jsonData = pm.response.json();",
+							"pm.test('overdue users array should be empty', () => {",
+							"    pm.expect(jsonData).to.be.empty;",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "localhost:8080/course/{{courseId}}/overdue",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"course",
+						"{{courseId}}",
+						"overdue"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

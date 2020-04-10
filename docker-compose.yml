@@ -1,0 +1,7 @@
+version: '3'
+services:
+  scrum-virus:
+    build:
+      .
+    ports:
+      - "8080:8080"
