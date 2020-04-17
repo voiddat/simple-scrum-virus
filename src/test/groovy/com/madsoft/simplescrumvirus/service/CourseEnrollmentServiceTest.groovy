@@ -93,7 +93,7 @@ class CourseEnrollmentServiceTest extends Specification {
 
     def 'finish - should throw EntityNotFoundException - no course'() {
         given:
-        courseRepository.findById(_) >> Optional.empty()
+        courseRepository.existsById(_) >> false
 
         when:
         courseEnrollmentService.finishCourseForUser(1L, 1L)
@@ -104,8 +104,8 @@ class CourseEnrollmentServiceTest extends Specification {
 
     def 'finish - should throw EntityNotFoundException - no user'() {
         given:
-        courseRepository.findById(_) >> Optional.of(course)
-        userRepository.findById(_) >> Optional.empty()
+        courseRepository.existsById(_) >> true
+        userRepository.existsById(_) >> false
 
         when:
         courseEnrollmentService.finishCourseForUser(1L, 1L)
@@ -116,8 +116,8 @@ class CourseEnrollmentServiceTest extends Specification {
 
     def 'finish - should throw EntityNotFoundException - no courseEnrollment'() {
         given:
-        courseRepository.findById(_) >> Optional.of(course)
-        userRepository.findById(_) >> Optional.of(user)
+        courseRepository.existsById(_) >> true
+        userRepository.existsById(_) >> true
         courseEnrollmentRepository.findCourseEnrollmentByUser_IdAndCourse_Id(_, _) >> Optional.empty()
 
         when:
@@ -129,8 +129,8 @@ class CourseEnrollmentServiceTest extends Specification {
 
     def 'finish - should finish course correctly'() {
         given:
-        courseRepository.findById(_) >> Optional.of(course)
-        userRepository.findById(_) >> Optional.of(user)
+        courseRepository.existsById(_) >> true
+        userRepository.existsById(_) >> true
         courseEnrollmentRepository.findCourseEnrollmentByUser_IdAndCourse_Id(_, _) >> Optional.of(courseEnrollment)
 
         when:

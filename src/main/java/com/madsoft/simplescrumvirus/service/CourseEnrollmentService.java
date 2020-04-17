@@ -41,8 +41,12 @@ public class CourseEnrollmentService {
 
     @Transactional
     public CourseEnrollment finishCourseForUser(long userId, long courseId) {
-        courseRepository.findById(courseId).orElseThrow(EntityNotFoundException::new);
-        userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        if (!courseRepository.existsById(courseId)) {
+            throw new EntityNotFoundException("Course id=" + courseId + " does not exist");
+        }
+        if (!userRepository.existsById(userId)) {
+            throw new EntityNotFoundException("User id=" + userId + " does not exist");
+        }
         CourseEnrollment courseEnrollment = courseEnrollmentRepository.findCourseEnrollmentByUser_IdAndCourse_Id(userId, courseId).orElseThrow(EntityNotFoundException::new);
 
         courseEnrollment.setFinishTime(LocalDateTime.now());
