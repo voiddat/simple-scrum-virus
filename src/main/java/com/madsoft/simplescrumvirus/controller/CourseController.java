@@ -28,12 +28,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.fetchAllCourses());
     }
 
-    @GetMapping(value = "/{courseId}")
+    @GetMapping(value = "{courseId}")
     public ResponseEntity<Course> fetchCourseById(@PathVariable String courseId) {
         return ResponseEntity.ok(courseService.fetchCourseById(Long.parseLong(courseId)));
     }
 
-    @GetMapping(value = "/{courseId}/overdue")
+    @GetMapping(value = "{courseId}/overdue")
     public ResponseEntity<List<User>> fetchOverdueUsersForGivenCourse(@PathVariable String courseId) {
         return ResponseEntity.ok(userService.fetchOverdueUsersForGivenCourse(Long.parseLong(courseId)));
     }
@@ -43,12 +43,12 @@ public class CourseController {
         return ResponseEntity.ok(courseService.addOrUpdateCourse(course));
     }
 
-    @PostMapping(value = "/{courseId}/enroll/{userId}")
+    @PostMapping(value = "{courseId}/enroll/{userId}")
     public ResponseEntity<CourseEnrollment> enrollUserToCourse(@PathVariable String courseId, @PathVariable String userId) {
         return ResponseEntity.ok(courseEnrollmentService.enrollUserToCourse(Long.parseLong(userId), Long.parseLong(courseId)));
     }
 
-    @PostMapping(value = "/{courseId}/finish/{userId}")
+    @PostMapping(value = "{courseId}/finish/{userId}")
     public ResponseEntity<CourseEnrollment> finishCourseForUser(@PathVariable String courseId, @PathVariable String userId) {
         return ResponseEntity.ok(courseEnrollmentService.finishCourseForUser(Long.parseLong(userId), Long.parseLong(courseId)));
     }
