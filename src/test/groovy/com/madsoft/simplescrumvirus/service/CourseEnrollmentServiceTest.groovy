@@ -53,7 +53,7 @@ class CourseEnrollmentServiceTest extends Specification {
         user.getUsername() >> 'Kowalski'
         courseRepository.findById(_) >> Optional.of(course)
         userRepository.findById(_) >> Optional.of(user)
-        courseEnrollmentRepository.findCourseEnrollmentByUser_IdAndCourse_Id(_, _) >> Optional.of(courseEnrollment)
+        courseEnrollmentRepository.existsCourseEnrollmentByUser_IdAndCourse_Id(_, _) >> true
 
         when:
         courseEnrollmentService.enrollUserToCourse(1L, 1L)
