@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,11 +24,11 @@ public class CourseEnrollmentService {
     public CourseEnrollment enrollUserToCourse(long userId, long courseId) {
         Course course = courseRepository.findById(courseId).orElseThrow(EntityNotFoundException::new);
         User user = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
-        if (!User.userList.contains(user.getUsername())) {
+        if (!isValidUsername(user)) {
             throw new IllegalArgumentException("Invalid username");
         }
-        Optional<CourseEnrollment> courseEnrollmentFromDb = courseEnrollmentRepository.findCourseEnrollmentByUser_IdAndCourse_Id(userId, courseId);
-        if (courseEnrollmentFromDb.isPresent()) {
+
+        if (isAlreadyEnrolled(userId, courseId)) {
             throw new IllegalArgumentException("User id=" + userId + " is already enrolled to course id=" + courseId);
         }
 
@@ -49,4 +48,13 @@ public class CourseEnrollmentService {
         courseEnrollment.setFinishTime(LocalDateTime.now());
         return courseEnrollmentRepository.save(courseEnrollment);
     }
+
+    private boolean isValidUsername(User user) {
+        return User.userList.contains(user.getUsername());
+    }
+
+    private boolean isAlreadyEnrolled(long userId, long courseId) {
+        return courseEnrollmentRepository.existsCourseEnrollmentByUser_IdAndCourse_Id(userId, courseId);
+    }
+
 }

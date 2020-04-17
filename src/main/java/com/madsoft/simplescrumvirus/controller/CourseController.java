@@ -16,14 +16,14 @@ import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/course")
+@RequestMapping("/course/")
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
     private final UserService userService;
     private final CourseEnrollmentService courseEnrollmentService;
 
-    @GetMapping(value = "/")
+    @GetMapping
     public ResponseEntity<List<Course>> fetchAllCourses() {
         return ResponseEntity.ok(courseService.fetchAllCourses());
     }
@@ -38,7 +38,7 @@ public class CourseController {
         return ResponseEntity.ok(userService.fetchOverdueUsersForGivenCourse(Long.parseLong(courseId)));
     }
 
-    @PostMapping(value = "/")
+    @PostMapping
     public ResponseEntity<Course> addOrUpdateCourse(@RequestBody Course course) {
         return ResponseEntity.ok(courseService.addOrUpdateCourse(course));
     }
